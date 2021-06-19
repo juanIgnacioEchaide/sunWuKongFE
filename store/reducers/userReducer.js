@@ -7,7 +7,7 @@ import {
 const initialState = {
     loading: false,
     error: null,
-    user: {}
+    userData: {}
 }
 
  const userReducer = (state = initialState, { type, payload }) => {
@@ -17,7 +17,7 @@ const initialState = {
         case REQUEST_USER_ERROR:
             return { ...state, loading: false, error: payload }
         case REQUEST_USER_SUCCESS:
-            return { ...state, loading: false, user: payload }
+            return { ...state, loading: false, userData: payload }
         default:
             return state
     }

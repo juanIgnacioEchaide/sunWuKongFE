@@ -9,6 +9,7 @@ import Products from '../UI/organisms/Products';
 import ClientOnly from '../components/ClientOnly';
 import Shopkart from '../UI/organisms/Shopkart';
 import PurchaseOrder from '../UI/organisms/PurchaseOrder';
+import Login from '../UI/organisms/Login';
 
 export default function Home() {
 
@@ -23,11 +24,12 @@ export default function Home() {
       <main className={styles.main}>
         <ClientOnly> 
         {/* <Tickets/> 
-            <Shopkart/>
-            <PurchaseOrder/>
+            <Shopkart/>      
             <Promos /> 
             <Products /> 
             <Menus />*/}
+            <Login />
+            <PurchaseOrder/>
         </ClientOnly>
       </main>
 
