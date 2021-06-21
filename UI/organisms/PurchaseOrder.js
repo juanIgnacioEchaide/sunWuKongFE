@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { gql, useMutation } from '@apollo/client'
-import { getShopkart } from '../../store/selectors'
+import { getShopkart, getUserData } from '../../store/selectors'
 import { clearKart } from '../../store/actions';
 import { useDispatch, useSelector } from 'react-redux'
 import { useCookies } from 'react-cookie';
@@ -21,12 +21,14 @@ mutation createTicket( $date:String, $author: String, $type: String, $data:[Prod
 export default function PurchaseOrder(){
     const dispatch = useDispatch()
     const shopkart = useSelector(state => getShopkart(state))
+    const userData = useSelector(state => getUserData(state))
     const [ createTicket , { data }] = useMutation(CREATE_TICKET)
     const [cookies, setCookie ] = useCookies(['id_token']);
 
     useEffect(() => {
         console.log(shopkart)
         console.log(cookies.id_token)
+        console.log(userData.userId)
     }, [shopkart])
 
     const handleTicketCreation = () => {
@@ -34,7 +36,7 @@ export default function PurchaseOrder(){
         variables:{ 
           id:"001",
           date: "2020-05-16",
-          author: "joiselo",
+          author: userData.userId,
           type: "purchase",
           data: shopkart.products,
           }

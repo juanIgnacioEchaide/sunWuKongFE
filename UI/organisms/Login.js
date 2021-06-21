@@ -1,5 +1,5 @@
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { gql, useMutation } from '@apollo/client'
 import { useDispatch, useSelector } from 'react-redux'
 import { getUserData } from '../../store/selectors'
@@ -13,32 +13,51 @@ export const LOGIN = gql`
       token 
       tokenExpiration
     }
-  }`
-  
+  }`  
 
 export default function Login(){
-
   const dispatch = useDispatch()
   const [ login , { data }] = useMutation(LOGIN)
+  const [ loginInpuData, setLoginInputData] = useState({ email: '' , password: ''})
   const [cookies, setCookie ] = useCookies(['id_token']);
  
+  const handleChange=(event)=>{
+    setLoginInputData({
+      ...loginInpuData,
+      [ event.target.name]:event.target.value
+    })
+  }
+
   useEffect(() => {
       console.log(cookies)
   }, [cookies])
  
-  const handleSignIn = async(e) => {
-      e.preventDefault()
-     await login({variables:{email:"mail@domain.com", password:"1234"}})
+  const handleSignIn = (e) => {
+    e.preventDefault()
+    login({
+          variables:{
+            email:loginInpuData.email, 
+            password: loginInpuData.password,
+          }})
       if(data){
         dispatch(requestUserSuccess(data.login))
         setCookie('id_token', data.login.token/* , { httpOnly: true } */)
       }
     } 
 
-  
   return(<div>
-          <button onClick={handleSignIn}>
-                  LOGIN
-              </button>
-      </div>)
+            <input 
+              name="email" 
+              type="text" 
+              placeholder="E-mail" 
+              onChange={handleChange}
+            />
+            <input 
+              name="password" 
+              type="text" 
+              placeholder="Password" 
+              onChange={handleChange}
+            />
+            <button onClick={handleSignIn}>LOGIN</button>
+        </div>)
 }
