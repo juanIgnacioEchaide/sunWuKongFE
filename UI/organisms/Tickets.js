@@ -3,6 +3,7 @@
 import { useEffect } from 'react'
 import { gql, useQuery, useMutation } from '@apollo/client'
 import { useDispatch, useSelector } from 'react-redux'
+import { useCookies } from 'react-cookie'
 import { requestTicketsLoading, requestTicketsError, requestTicketsSuccess } from '../../store/actions'
 import { getTickets } from '../../store/selectors'
 
@@ -22,12 +23,18 @@ export const GET_TICKETS = gql`
   }`
 
 export default function Tickets() {
+  const [cookies, setCookie ] = useCookies(['id_token']);
+  const { data, loading, error } = useQuery(GET_TICKETS, { context: { 
+    headers: {
+      authorization: `Bearer ${cookies.id_token}` 
+    }
+  }})
 
-  const { data, loading, error } = useQuery(GET_TICKETS)
   const dispatch = useDispatch()
   const tickets = useSelector(state => getTickets(state))
 
-  useEffect(() => {   
+  useEffect(() => {  
+
       if(loading){
           return dispatch(requestTicketsLoading())
         }
@@ -42,15 +49,14 @@ export default function Tickets() {
 
   return (
     <div>
-      {console.log(tickets)}
-           {tickets && tickets.map( ticket => (
+{/*            {tickets && tickets.map( ticket => (
             <div key={ticket.date}>
                 <h3>{ticket.date}</h3>
                 <p>
                     {ticket.author} - {ticket.price}
                 </p>
             </div>
-          ))} 
+          ))}  */}
     </div>
   )
 }

@@ -23,13 +23,13 @@ export default function Home() {
 
       <main className={styles.main}>
         <ClientOnly> 
-        {/* <Tickets/> 
+        {/* <PurchaseOrder/>            
             <Shopkart/>      
             <Promos /> 
             <Products /> 
             <Menus />*/}
             <Login />
-            <PurchaseOrder/>
+            <Tickets/>
         </ClientOnly>
       </main>
 

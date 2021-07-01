@@ -22,7 +22,7 @@ export default function PurchaseOrder(){
     const dispatch = useDispatch()
     const shopkart = useSelector(state => getShopkart(state))
     const userData = useSelector(state => getUserData(state))
-    const [ createTicket , { data }] = useMutation(CREATE_TICKET)
+    const [ createTicket , { error, data }] = useMutation(CREATE_TICKET)
     const [cookies, setCookie ] = useCookies(['id_token']);
 
     useEffect(() => {
@@ -30,9 +30,9 @@ export default function PurchaseOrder(){
         console.log(cookies.id_token)
         console.log(userData.userId)
     }, [shopkart])
-
-    const handleTicketCreation = () => {
-      createTicket({
+    
+    const handleTicketCreation = async() => {
+      await createTicket({
         variables:{ 
           id:"001",
           date: "2020-05-16",
@@ -46,7 +46,7 @@ export default function PurchaseOrder(){
 
     
     return(<div>
-            <button onClick={() => handleTicketCreation()}>
+            <button onClick={handleTicketCreation}>
                     CONFIRMAR PEDIDO
                 </button>
                 {data && <div>CONFIRMASTE TU PEDIDO!{console.log(data)}</div>}

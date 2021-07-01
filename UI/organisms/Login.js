@@ -17,10 +17,11 @@ export const LOGIN = gql`
 
 export default function Login(){
   const dispatch = useDispatch()
-  const [ login , { data }] = useMutation(LOGIN)
+  const [ login , { loading, error, data }] = useMutation(LOGIN)
   const [ loginInpuData, setLoginInputData] = useState({ email: '' , password: ''})
   const [cookies, setCookie ] = useCookies(['id_token']);
  
+
   const handleChange=(event)=>{
     setLoginInputData({
       ...loginInpuData,
@@ -28,13 +29,9 @@ export default function Login(){
     })
   }
 
-  useEffect(() => {
-      console.log(cookies)
-  }, [cookies])
- 
-  const handleSignIn = (e) => {
-    e.preventDefault()
-    login({
+  /* TODO useReducer para el form  */
+  const handleSignIn = async(e) => {
+    await login({
           variables:{
             email:loginInpuData.email, 
             password: loginInpuData.password,
@@ -42,9 +39,16 @@ export default function Login(){
       if(data){
         dispatch(requestUserSuccess(data.login))
         setCookie('id_token', data.login.token/* , { httpOnly: true } */)
+        console.log(cookies)
       }
     } 
 
+    if(loading){
+      dispatch(requestUserLoading())
+    }
+      if(error){
+      dispatch(requestUserError(error))
+    }
   return(<div>
             <input 
               name="email" 
@@ -54,7 +58,7 @@ export default function Login(){
             />
             <input 
               name="password" 
-              type="text" 
+              type="password" 
               placeholder="Password" 
               onChange={handleChange}
             />
