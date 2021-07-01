@@ -1,9 +1,9 @@
 
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { gql, useQuery, useMutation } from '@apollo/client'
 import { useDispatch, useSelector } from 'react-redux'
-import { useCookies } from 'react-cookie'
+import { getToken } from '../../store/selectors'
 import { requestTicketsLoading, requestTicketsError, requestTicketsSuccess } from '../../store/actions'
 import { getTickets } from '../../store/selectors'
 
@@ -23,18 +23,27 @@ export const GET_TICKETS = gql`
   }`
 
 export default function Tickets() {
-  const [cookies, setCookie ] = useCookies(['id_token']);
-  const { data, loading, error } = useQuery(GET_TICKETS, { context: { 
-    headers: {
-      authorization: `Bearer ${cookies.id_token}` 
+  const token = useSelector( state =>getToken(state)) || ''
+  const context = () => { 
+    if(token){
+    return{ 
+          context: { 
+            headers: {
+              Authorization: `Bearer ${token}` 
+            }
+          }
+      }
     }
-  }})
+    return null
+  }
 
+  const { data, loading, error } = useQuery(GET_TICKETS , context)
   const dispatch = useDispatch()
   const tickets = useSelector(state => getTickets(state))
+  const [loginRequired , setLoginRequired] = useState(true)
 
   useEffect(() => {  
-
+    if(token){
       if(loading){
           return dispatch(requestTicketsLoading())
         }
@@ -43,9 +52,13 @@ export default function Tickets() {
         }
         if(data){
           console.log(data)
-          return dispatch(requestTicketsSuccess(data.ticket))
-        }
-  }, [loading, error, data])
+          return dispatch(requestTicketsSuccess(data.ticket))   
+      }else{
+        return <div>logueate</div>
+      }
+      setLoginRequired(false);   
+    }
+  }, [loading, error, data, token])
 
   return (
     <div>
