@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { gql, useQuery, useMutation } from '@apollo/client'
 import { useDispatch, useSelector } from 'react-redux'
 import { getToken } from '../../store/selectors'
+import { setContext } from '@apollo/client/link/context';
 import { requestTicketsLoading, requestTicketsError, requestTicketsSuccess } from '../../store/actions'
 import { getTickets } from '../../store/selectors'
 
@@ -23,19 +24,34 @@ export const GET_TICKETS = gql`
   }`
 
 export default function Tickets() {
-  const token = useSelector( state =>getToken(state)) || ''
+  const token = useSelector( state => getToken(state))
+  const context = setContext((_, { headers }) => {
+    // get the authentication token from local storage if it exists
+
+    // return the headers to the context so httpLink can read them
+    return {
+      headers: {
+        ...headers,
+        authorization: token ? `Bearer ${token}` : "",
+      }
+    }
+  });
+
+  
+/* 
   const context = () => { 
+    const token = getToken()
     if(token){
     return{ 
           context: { 
             headers: {
-              Authorization: `Bearer ${token}` 
+              authorization: `Bearer ${token}` 
             }
           }
       }
     }
     return null
-  }
+  } */
 
   const { data, loading, error } = useQuery(GET_TICKETS , context)
   const dispatch = useDispatch()
