@@ -1,11 +1,11 @@
 
-import { useReducer } from 'react'
+import { useState, useReducer } from 'react'
 import { gql, useMutation } from '@apollo/client'
 import { useDispatch } from 'react-redux'
 import { useCookies } from 'react-cookie'
 import { requestUserLoading, requestUserError, requestUserSuccess } from '../../store/actions'
 import { loginFormInitial, loginFormReducer } from '../../utils/helpers'
-import { INPUT_EMAIL, INPUT_PASSWORD } from '../../utils/constants'
+import { INPUT_EMAIL, INPUT_PASSWORD, CLEAR_FORM } from '../../utils/constants'
 
 export const LOGIN = gql`
   mutation login($email: String, $password: String){
@@ -17,52 +17,59 @@ export const LOGIN = gql`
   }`  
 
 export default function Login(){
+
   const storeDispatch = useDispatch()
   const [ login , { loading, error, data }] = useMutation(LOGIN)
   const [state, dispatch] = useReducer(loginFormReducer, loginFormInitial)
+  const [loggedIn, setLoggedIn] = useState(false)
   const [cookies, setCookie] = useCookies(['id_token']);
   
+  const handleChange = (event, type) => {
+    dispatch({
+      type: type,
+      payload: event.target.value
+    })}
 
-  /* TODO useReducer para el form  */
   const handleSignIn = (e) => {
-    console.log('dispara login')
     login({
           variables:{
             email:state.email, 
             password: state.password,
           }})
+    handleChange(e, CLEAR_FORM)
+    setLoggedIn(true)
     } 
+    
     if(data){
       storeDispatch(requestUserSuccess(data.login))
-      setCookie('id_token', data.login.token)
-      console.log(cookies)
+      setCookie('id_token', data.login.token)     
     }
     if(loading){
       storeDispatch(requestUserLoading())
     }
       if(error){
       storeDispatch(requestUserError(error))
+      setLoggedIn(false)
     }
 
   return(<div>
+         {  !loggedIn 
+            ?
+            <> 
             <input 
               name="email" 
               type="text" 
               placeholder="E-mail" 
-              onChange={ event => dispatch({
-                type:  INPUT_EMAIL,
-                payload: event.target.value
-              })}
-            />
+              onChange={ event => handleChange(event,INPUT_EMAIL)}
+              />
             <input 
-              name="password" 
-              type="password" 
-              placeholder="Password" 
-              onChange={event => dispatch({
-                type:  INPUT_PASSWORD,
-                payload: event.target.value
-              })}
-            />
+                name="password" 
+                type="password" 
+                placeholder="Password" 
+                onChange={event => handleChange(event,INPUT_PASSWORD)}
+              />
             <button onClick={handleSignIn}>LOGIN</button>
+            </>
+            : <div>ESTAS LOGUEADO</div>}
         </div>)
 }
