@@ -1,9 +1,10 @@
 import '../styles/globals.css'
-import { Provider as ReduxProvider } from 'react-redux'
+import { Provider as ReduxProvider, useSelector } from 'react-redux'
 import useMedia from '../utils/useMedia'
+import useLoginStatus from '../utils/useLoginStatus'
 import Layout from '../UI/organisms/Layout'
-import {ApolloProvider, ApolloClient, HttpLink, ApolloLink, InMemoryCache, concat } from '@apollo/client'
-import { CookiesProvider, Cookies, } from 'react-cookie'
+import { ApolloProvider, ApolloClient, HttpLink, ApolloLink, InMemoryCache, concat } from '@apollo/client'
+import { CookiesProvider, Cookies } from 'react-cookie'
 import { wrapper } from '../store'
 
 const httpLink = new HttpLink({ uri:'http://localhost:4000/' })
@@ -30,13 +31,14 @@ const client = new ApolloClient({
 });
 
 function MyApp({ Component, pageProps }) {
-
+  
   const size = useMedia();
+  const loginStatus = useLoginStatus()
 
   return (<ApolloProvider client={client}>
             <CookiesProvider>
-              <Layout size={size}>
-                <Component {...pageProps} />
+              <Layout size={size} loginStatus={loginStatus}>
+                <Component {...pageProps}/>
               </Layout>
             </CookiesProvider>
           </ApolloProvider>)

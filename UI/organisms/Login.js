@@ -28,8 +28,6 @@ export default function Login(){
       type: type,
       payload: event.target.value
     })
-    if(type===CLEAR_FORM)
-      event.target.value = ' '
   }
 
   const handleSignIn = (e) => {
@@ -58,19 +56,19 @@ export default function Login(){
          {  !loggedIn 
             ?
             <> 
-            <input 
-              name="email" 
-              type="text" 
-              placeholder="E-mail" 
-              onChange={ event => handleChange(event,INPUT_EMAIL)}
-              />
-            <input 
-                name="password" 
-                type="password" 
-                placeholder="Password" 
-                onChange={event => handleChange(event,INPUT_PASSWORD)}
-              />
-            <button onClick={handleSignIn}>LOGIN</button>
+              <input 
+                name="email" 
+                type="text" 
+                placeholder="E-mail" 
+                onChange={ event => handleChange(event,INPUT_EMAIL)}
+                />
+              <input 
+                  name="password" 
+                  type="password" 
+                  placeholder="Password" 
+                  onChange={event => handleChange(event,INPUT_PASSWORD)}
+                />
+              <button onClick={handleSignIn}>LOGIN</button>
             </>
             : <div>ESTAS LOGUEADO</div>}
         </div>)
