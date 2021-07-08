@@ -17,7 +17,6 @@ export const LOGIN = gql`
   }`  
 
 export default function Login(){
-
   const storeDispatch = useDispatch()
   const [ login , { loading, error, data }] = useMutation(LOGIN)
   const [state, dispatch] = useReducer(loginFormReducer, loginFormInitial)
@@ -28,7 +27,10 @@ export default function Login(){
     dispatch({
       type: type,
       payload: event.target.value
-    })}
+    })
+    if(type===CLEAR_FORM)
+      event.target.value = ' '
+  }
 
   const handleSignIn = (e) => {
     login({

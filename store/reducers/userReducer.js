@@ -5,6 +5,7 @@ import {
  } from '../actionTypes'
 
 const initialState = {
+    loggedIn: false,
     loading: false,
     error: null,
     userData: {}
@@ -17,7 +18,7 @@ const initialState = {
         case REQUEST_USER_ERROR:
             return { ...state, loading: false, error: payload }
         case REQUEST_USER_SUCCESS:
-            return { ...state, loading: false, userData: payload }
+            return { ...state, loading: false, userData: payload, loggedIn: true }
         default:
             return state
     }
