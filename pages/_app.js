@@ -12,7 +12,7 @@ const authMiddleware = new ApolloLink((operation, forward) => {
   const cookies = new Cookies();
   const token = cookies.get('id_token');
   const authHeader = token ? `bearer ${token}` : ''
-  console.log('cookie del toor', cookies.get('id_token'))
+  console.log('token cookie', authHeader)
   // add the authorization to the headers
   operation.setContext(({ headers = {} }) => ({
     headers: {

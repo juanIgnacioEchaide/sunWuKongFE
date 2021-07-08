@@ -24,42 +24,12 @@ export const GET_TICKETS = gql`
   }`
 
 export default function Tickets() {
-  const token = useSelector( state => getToken(state))
-  const context = setContext((_, { headers }) => {
-    // get the authentication token from local storage if it exists
-
-    // return the headers to the context so httpLink can read them
-    return {
-      headers: {
-        ...headers,
-        authorization: token ? `Bearer ${token}` : "",
-      }
-    }
-  });
-
-  
-/* 
-  const context = () => { 
-    const token = getToken()
-    if(token){
-    return{ 
-          context: { 
-            headers: {
-              authorization: `Bearer ${token}` 
-            }
-          }
-      }
-    }
-    return null
-  } */
-
-  const { data, loading, error } = useQuery(GET_TICKETS , context)
+  const { data, loading, error } = useQuery(GET_TICKETS)
   const dispatch = useDispatch()
   const tickets = useSelector(state => getTickets(state))
   const [loginRequired , setLoginRequired] = useState(true)
 
   useEffect(() => {  
-    if(token){
       if(loading){
           return dispatch(requestTicketsLoading())
         }
@@ -73,8 +43,7 @@ export default function Tickets() {
         return <div>logueate</div>
       }
       setLoginRequired(false);   
-    }
-  }, [loading, error, data, token])
+  }, [loading, error, data])
 
   return (
     <div>
