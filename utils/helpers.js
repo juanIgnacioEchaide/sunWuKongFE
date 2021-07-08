@@ -1,3 +1,8 @@
+import { 
+    INPUT_EMAIL, 
+    INPUT_PASSWORD 
+} from '../utils/constants'
+
 export const loginFormInitial = {
     email: " ",
     password: " "
@@ -5,10 +10,10 @@ export const loginFormInitial = {
   
 export const loginFormReducer = (state = formInitial, { type, payload }) => {
     switch (type) {
-      case 'HANDLE INPUT EMAIL':
-        return { ...state, ...payload }
-      case 'HANDLE INPUT PASSWORD':
-        return { ...state, ...payload }
+      case INPUT_EMAIL:
+        return { ...state, email: payload }
+      case INPUT_PASSWORD:
+        return { ...state, password: payload }
     default:
       return state
     }
