@@ -21,7 +21,7 @@ export default function Login(){
   const [ login , { loading, error, data }] = useMutation(LOGIN)
   const [state, dispatch] = useReducer(loginFormReducer, loginFormInitial)
   const [loggedIn, setLoggedIn] = useState(false)
-  const [cookies, setCookie] = useCookies(['id_token']);
+  const [cookies, setCookie] = useCookies(['id_token'])
   
   const handleChange = (event, type) => {
     dispatch({
@@ -44,7 +44,8 @@ export default function Login(){
     
     if(data){
       storeDispatch(requestUserSuccess(data.login))
-      setCookie('id_token', data.login.token)     
+      setCookie('id_token', data.login.token) 
+      localStorage.setItem('loggedIn',true);    
     }
     if(loading){
       storeDispatch(requestUserLoading())

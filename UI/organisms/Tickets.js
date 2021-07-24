@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getToken } from '../../store/selectors'
 import { setContext } from '@apollo/client/link/context';
 import { requestTicketsLoading, requestTicketsError, requestTicketsSuccess } from '../../store/actions'
-import { getTickets } from '../../store/selectors'
+import { getTickets, getLogStatus } from '../../store/selectors'
 
 
 export const GET_TICKETS = gql`
@@ -24,25 +24,25 @@ export const GET_TICKETS = gql`
   }`
 
 export default function Tickets() {
+  const loggedIn = useSelector(state => getLogStatus(state));
   const { data, loading, error } = useQuery(GET_TICKETS)
   const dispatch = useDispatch()
   const tickets = useSelector(state => getTickets(state))
-  const [loginRequired , setLoginRequired] = useState(true)
 
   useEffect(() => {  
+    if(!loggedIn){ 
       if(loading){
-          return dispatch(requestTicketsLoading())
-        }
-        if(error){
-          return dispatch(requestTicketsError(error))
-        }
-        if(data){
-          console.log(data)
-          return dispatch(requestTicketsSuccess(data.ticket))   
-      }else{
-        return <div>logueate</div>
-      }
-      setLoginRequired(false);   
+            return dispatch(requestTicketsLoading())
+          }
+          if(error){
+            return dispatch(requestTicketsError(error))
+          }
+          if(data){
+            console.log(data)
+            return dispatch(requestTicketsSuccess(data.ticket))   
+        }else{
+          return <div>logueate</div>
+        }}
   }, [loading, error, data])
 
   return (

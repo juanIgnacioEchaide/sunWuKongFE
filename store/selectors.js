@@ -5,4 +5,5 @@ export const getMenus = state => state.menus.menus;
 export const getShopkart = state => state.shopkart;
 export const getUserData = state => state.user.userData;
 export const getToken = state => state?.user?.userData.token
+export const getLogStatus = state => state?.user?.userData.loggedIn
 
