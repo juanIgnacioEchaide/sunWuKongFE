@@ -45,7 +45,8 @@ export default function Login(){
     if(data){
       storeDispatch(requestUserSuccess(data.login))
       setCookie('id_token', data.login.token) 
-      localStorage.setItem('loggedIn',true);    
+      window.location.reload()
+
     }
     if(loading){
       storeDispatch(requestUserLoading())
