@@ -1,8 +1,17 @@
-const Layout = ({children,size}) => {
+import { getBrowserCookie } from "../../utils/auth";
 
-    return( <div size={size}>
-                {children}
-            </div>)
-}
+const withLayout = ({ children, size }) => {
+  const userAuthenticated = getBrowserCookie();
 
-export default Layout
+  if (!userAuthenticated) {
+    return <div>{children}</div>;
+  }
+  return (
+    <div size={size}>
+      <div>lay out con algo</div>
+      {children}
+    </div>
+  );
+};
+
+export default withLayout;
