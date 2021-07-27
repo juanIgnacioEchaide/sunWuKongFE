@@ -1,14 +1,18 @@
 import { getBrowserCookie } from "../../utils/auth";
 
+const Nav = ({routes, index})=>{
+  return(<div>soy el</div>)
+}
+
 const withLayout = ({ children, size }) => {
   const userAuthenticated = getBrowserCookie();
 
   if (!userAuthenticated) {
-    return <div>{children}</div>;
+    return <div>{children}</div>
   }
   return (
     <div size={size}>
-      <div>lay out con algo</div>
+      <Nav />
       {children}
     </div>
   );
