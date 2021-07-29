@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types';
-import { MOBILE_SIZE, DESKTOP_SIZE } from '../utils/constants';
+import { size } from '../utils/constants';
 
 export default function useMedia() {    
     
-    const [size, setSize] = useState('');
+    const [viewportSize, setViewportSize] = useState('');
 
     const matchSize = ()=>{
         let portrait= window.matchMedia("(orientation: portrait)");
@@ -12,10 +12,10 @@ export default function useMedia() {
         let desktopSize= window.matchMedia("(min-width: 768px)");
 
         if(mobileSize.matches){
-            setSize(MOBILE_SIZE);
+            setViewportSize(size.MOBILE_SIZE);
         }
         if(desktopSize.matches){
-            setSize(DESKTOP_SIZE);
+            setViewportSize(size.DESKTOP_SIZE);
         }
     }
 
@@ -24,7 +24,7 @@ export default function useMedia() {
         window.onresize = () =>  {
             matchSize();
         }    
-        }, [size]);
+        }, [viewportSize]);
 
-    return size;
+    return viewportSize;
 }

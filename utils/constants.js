@@ -1,5 +1,8 @@
-export const MOBILE_SIZE = 'MOBILE_SIZE'
-export const DESKTOP_SIZE = 'DESKTOP_SIZE'
+
+export const size = {
+    MOBILE_SIZE : 'MOBILE_SIZE',
+    DESKTOP_SIZE : 'DESKTOP_SIZE'
+}
 
 export const INPUT_EMAIL = 'INPUT_EMAIL'
 export const INPUT_PASSWORD = 'INPUT_PASSWORD'
